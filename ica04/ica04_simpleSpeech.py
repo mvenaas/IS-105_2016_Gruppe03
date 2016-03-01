@@ -1,5 +1,5 @@
-import speech_recognition as sr # Imports the speech to text module
-import pyttsx # Import the text to speech module
+import speech_recognition as sr                         # Imports the speech to text module
+import pyttsx                                           # Import the text to speech module
 engine = pyttsx.init()
 
 
@@ -8,13 +8,13 @@ engine.runAndWait()
 
 def taleInput():
     taleInput == ""
-    return taleInput # Creates the variable that holds the reply from the user's voice
+    return taleInput                                    # Creates the variable that holds the reply from the user's voice
 
 engine.say("Please say the option that corresponds to your choice, one to five")
 engine.runAndWait()
 
-#print what options the user have aviable
-print "Your options are:"
+
+print "Your options are:"                               #print what options the user have aviable
 print " "
 print "1) Addition"
 print "2) Subtraction"
@@ -25,15 +25,15 @@ print "4) Division"
 print "5) Quit"
 print " "
     
-# Starts recoring from the microphone
-r = sr.Recognizer()
+
+r = sr.Recognizer()                                     # Starts recoring from the microphone
 with sr.Microphone() as source:
     audio = r.listen(source)
 
 
-WIT_AI_KEY = "MNC6LBRKJ5JH2X5T532ZDBELUKSNVD52" # Wit.ai client key
+WIT_AI_KEY = "MNC6LBRKJ5JH2X5T532ZDBELUKSNVD52"         # Wit.ai client key
 try:
-    taleInput = r.recognize_wit(audio, key=WIT_AI_KEY) # saves the user's voice input into this variable    
+    taleInput = r.recognize_wit(audio, key=WIT_AI_KEY)  # saves the user's voice input into this variable    
 except sr.UnknownValueError:
     print("Could not understand that, sorry")
 except sr.RequestError as e:
@@ -44,14 +44,14 @@ if taleInput == "one":
     print ""
     engine.say("You have choosen addition, please follow the instructions on the screen")
     engine.runAndWait()
-    add1 = input("Add this: ") # The numbers to add togheter
+    add1 = input("Add this: ")                          # The numbers to add togheter
     add2 = input("to this: ")
-    engine.say("By addings these two numbers, we got the following number") # The computer tells the user this message and prints result
-    engine.runAndWait()
+    engine.say("By addings these two numbers, we got the following number") 
+    engine.runAndWait()                                 # The computer tells the user this message and prints result
     print add1, "+", add2, "=", add1 + add2
-    print "" # To add a extra space for convinience saks
+    print ""                                            # To add a extra space for convinience saks
         
-elif taleInput == "two": # The rest of the methods below follows the addition patern with simple mathematical calculations
+elif taleInput == "two":                                # The rest of the methods below follows the addition patern with simple mathematical calculations
     print "You choosed subtraction"
     print ""
     engine.say("You have choosen subtraction, please follow the instructions on the screen")
@@ -93,7 +93,7 @@ elif taleInput == "five":
     engine.say("If I were Janis I would be mighty impressed by such an intelligent program")
     engine.runAndWait()
         
-else: # If the computer cannot determine what word was said, return this message and close the program. 
+else:                                                   # If the computer cannot determine what word was said, return this message and close the program. 
     print "Could not understand that word, sorry *sadbot*"
     engine.say("We could not understand what was said, sorry. The program will therfore close")
     engine.runAndWait()  
