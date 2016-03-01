@@ -8,27 +8,27 @@ Thanks to:
 - http://docs.python-guide.org/en/latest/scenarios/json/
 """
 
-# Import dependencies
-import speech_recognition as sr
+
+import speech_recognition as sr                                     # Import dependencies
 import pyttsx
 import json
 
-# pyttsx speech preferences
-engine = pyttsx.init()
+
+engine = pyttsx.init()                                              # pyttsx speech preferences
 engine.setProperty("rate", 100)
 engine.setProperty("voice", 16)
 
-# Initiate variables
-WIT_AI_KEY = "XWEMS7AMLRWMZRUEIIVZPBGACSVDVP4I"
+
+WIT_AI_KEY = "XWEMS7AMLRWMZRUEIIVZPBGACSVDVP4I"                     # Initiate variables
 r = sr.Recognizer()
 m = sr.Microphone()
 
-# Adjust microphone sensitivity
-with m as source: r.adjust_for_ambient_noise(source)
+
+with m as source: r.adjust_for_ambient_noise(source)                # Adjust microphone sensitivity
 
 def parseReplyData(replyData):
-    replyData = json.dumps(replyData) # Parse JSON object to JSON String
-    parsed_json = json.loads(replyData) # Parse JSON string to Python dict
+    replyData = json.dumps(replyData)                               # Parse JSON object to JSON String
+    parsed_json = json.loads(replyData)                             # Parse JSON string to Python dict
     
     if parsed_json["_text"] == "hello":
         print("hello to you as well")
@@ -41,8 +41,8 @@ def main():
         print("Recognizing")
         try:
             
-            # Utilising wit.ai as speech recognizer 
-            # Because we define shoow_all as true, it returns a raw JSON object
+                                                                    # Utilising wit.ai as speech recognizer 
+                                                                    # Because we define shoow_all as true, it returns a raw JSON object
             replyData = r.recognize_wit(audio, key=WIT_AI_KEY, show_all=True)
             parseReplyData(replyData)
                     
