@@ -1,1 +1,1 @@
-This folder contains tasks releated to ICA04. It both contains an working speech to text (aswell as the other way around) aswell as the repport for natural language.
+This folder contains tasks releated to ICA04. It both contains an working speech to text (aswell as the other way around), aswell as function chat bot with more advanced algoritms. Lastly is named "advancedSpeech.py".
