@@ -1,1 +1,0 @@
-In this folder there are three types of files. Firstly there is the excel document that contains answer for the math questions regarding ica02. Secondly there is the fakultetHuffman.jpg that contains an illustration of the Huffman code algorithm. Lastly is the encryption program, aswell as the readme file explaining the program. 
