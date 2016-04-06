@@ -1,5 +1,6 @@
 import time #Importing time module
 
+# Code based on following code: http://codepad.org/cywKyxXO . Edited to support our needs aswell adapted to ICA08
 print """
 A farmer is to ferry across a river a goat, a cabbage, and a wolf.
 Besides the farmer himself, the boat allows him to carry only
