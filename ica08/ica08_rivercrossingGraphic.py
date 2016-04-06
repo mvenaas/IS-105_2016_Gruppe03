@@ -112,7 +112,10 @@ generate(cfg)
 print "\nThe solution to the problem:"
 
 #imports the PIL module which helps loading images. Idea is that for each step a new image will be shown for two seconds
+import psutil # Not in use, idea was to kill pop-up window, did not work
+import os
 from PIL import Image  
+
 
 for step in solutionstack:
     time.sleep(2)       #Time delay between printing each step.
@@ -120,29 +123,34 @@ for step in solutionstack:
     if step == "The farmer goes --> with the goat":
         img = Image.open("state1.png")
         img.show()
-        img.close()
-        
-    elif step == "The farmer goes <-- alone":
+        img.close
+    elif step == "The farmer goes <-- alone":     
+        os.system("taskkill /im dllhost.exe")
         img = Image.open("state2.png")
         img.show()
         img.close()
     elif step == "The farmer goes --> with the cabbage":
+        os.system("taskkill /im dllhost.exe")
         img = Image.open("state3.png")
         img.show()
         img.close()
     elif step == "The farmer goes <-- with the goat":
+        os.system("taskkill /im dllhost.exe")
         img = Image.open("state4.png")
         img.show()
         img.close() 
     elif step == "The farmer goes --> with the wolf":
+        os.system("taskkill /im dllhost.exe")
         img = Image.open("state5.png")
         img.show()
         img.close()
     elif step == "The farmer goes <-- alone":
+        os.system("taskkill /im dllhost.exe")
         img = Image.open("state6.png")
         img.show()
         img.close()
     elif step == "The farmer goes --> with the goat":
+        os.system("taskkill /im dllhost.exe")
         img = Image.open("state7.png")
         img.show()
         img.close()
@@ -152,6 +160,9 @@ for step in solutionstack:
 
 #print ths endstate, and loads up correct picture
 print cfg
+os.system("taskkill /im dllhost.exe")
 img = Image.open("end.png")
 img.show()
 img.close()
+time.sleep(2)
+os.system("taskkill /im dllhost.exe")
