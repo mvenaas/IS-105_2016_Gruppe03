@@ -110,11 +110,16 @@ print "Trace of the recursive solution-finding process:"
 generate(cfg)
 
 print "\nThe solution to the problem:"
+from PIL import Image
 for step in solutionstack:
     time.sleep(2)       #Time delay between printing each step.
+    if step == "The farmer goes --> with the goat":
+        img = Image.open("D:\Dårlige rivercrossing tegninger\crossing conditions\crossingfun\Lg_LB_RBm_Rfgr.png")
+        img.show()
+        img.close()
     if step:
         print "  ",step
-        
+
 print cfg
 
 #Print endstate
