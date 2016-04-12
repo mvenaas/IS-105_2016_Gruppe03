@@ -1,0 +1,1 @@
+In this subfolder of ica08, is an sollution for ica08. Ideally we'll try making a working version of our own code, but for now this what we got. **working**
