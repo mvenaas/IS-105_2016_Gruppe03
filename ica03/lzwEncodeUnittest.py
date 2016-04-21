@@ -1,5 +1,5 @@
 import unittest                                                         # Imports the test library
-from LZWDecoding import encode
+from lzwDecoding import encode
 
 class TestEncodeFunction(unittest.TestCase):                            # Creates the test class and gives it the name of the function we are testing
     def setUp(self):

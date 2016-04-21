@@ -1,9 +1,9 @@
 
-import shelve, time, sys, os
+import shelve, time, sys, os                                # Shelve is a module used to store objects in files
 
-class File(object):
+class File(object):                                         # A file can in this application conduct many operations
 
-    def __init__(self, name, type, parent=None, text=''):
+    def __init__(self, name, type, parent=None, text=''):   # init is runs as first priority at initialisation
         self.list = []
         self.name = name
         self.type = type
@@ -11,13 +11,13 @@ class File(object):
         self.parent = parent
         self.text = text
 
-    def is_file(self, name):
+    def is_file(self, name):                                # Checks if "name" is a file. everything is considered a file
         for node in self.list:
             if node.name == name:
                 return True
         return False
 
-    def is_dir(self, name):
+    def is_dir(self, name):                                 # Checks if "name" is a directory. Files can be of type dir
         if(self.is_file(name)) and self.get(name).type == 'dir':
             return True
         return False
@@ -26,13 +26,13 @@ class File(object):
         for node in self.list:
             if node.name == name:
                 return node
-        
+
     def add(self, name, type, text=''):
         self.list.append(File(name, type, self, text))
-             
+
     def remove(self, name):
         self.list.remove(self.get(name))
-            
+
     def rename(self, name):
         self.name = name
 
@@ -40,21 +40,24 @@ class File(object):
         src = self.get(src)
         self.add(dest, src.type, src.text)
 
-    def stat(self):
+    def stat(self):                                           # Lists the Name, created and type stamps of the file
         print 'Listing', self.name
         for node in self.list:
             print 'Name:', node.name, '; Created:', node.time, '; Type:', node.type
-            
+
     def read(self):
         print 'Reading file:', self.name
         print self.text
 
-class FileSystem(object):
-    
+
+
+
+class Filetem(object):
+
     COMMANDS = ['ls', 'mkdir', 'chdir', 'cd', 'rmdir', 'create', 'read', 'rm', 'mv', 'cp', 'help', 'exit']
-    
+
     def __init__(self):
-        self.io = shelve.open('file.sys', writeback=True)
+        self.io = shelve.open('file.sys', writeback=True)   # Keys can only be strings. Writeback chaches data to memory, makes it easier to mutate entries. This can cause memory spikes
         if self.io.has_key('fs'):
             self.root = self.io['fs']
         else:
@@ -97,8 +100,8 @@ class FileSystem(object):
                 print 'Directory deleted.'
             else:
                 print name, ' - invalid directory.'
-                
-    
+
+
     def rm(self, cmd):
         if len(cmd) < 2 or cmd[1] == '':
             print 'rm - remove file'
@@ -110,7 +113,7 @@ class FileSystem(object):
                 print 'File deleted.'
             else:
                 print name, ' - invalid file.'
-                  
+
     def ls(self, cmd):
         if(len(cmd) > 1):
             print 'ls - list stats'
@@ -124,7 +127,7 @@ class FileSystem(object):
         else:
             name = cmd[1]
             self.curr.add(name, 'file', raw_input('Enter file context: '))
-            
+
     def read(self, cmd):
         if len(cmd) < 2 or cmd[1] == '':
             print 'read - read a file'
@@ -159,11 +162,11 @@ class FileSystem(object):
                 self.curr.copy(src, dest)
             else:
                 print src, 'invalid file'
-    
+
     def save(self):
         self.io['fs'] = self.root
         self.io.sync()
-            
+
     def help(self, cmd):
         print 'COMMANDS: mkdir, ls, chdir, rmdir, create, read, mv, cp, rm, exit'
 
@@ -179,7 +182,7 @@ def main():
             method = getattr(fs, cmd[0])
         except AttributeError:
             print 'Invalid command. Type "help".'
-        if method is not None and cmd[0] in FileSystem.COMMANDS and callable(method):
+        if method is not None and cmd[0] in FileSystem.COMMANDS and callable(method): #autosave. If no action is taking place, save.
             method(cmd)
             fs.save()
         else:

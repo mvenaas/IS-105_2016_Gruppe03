@@ -1,6 +1,11 @@
-import time #Importing time module
+import os
+import time
+from PIL import Image  
+from socket import *
+import sys
+import select
 
-# Code based on following code: http://codepad.org/cywKyxXO . Edited to support our needs aswell adapted to ICA08
+# Code based on following code: http://codepad.org/cywKyxXO . Edited to support our needs aswell adapted to ICA09
 print """
 A farmer is to ferry across a river a goat, a cabbage, and a wolf.
 Besides the farmer himself, the boat allows him to carry only
@@ -26,7 +31,6 @@ carryables=(goat,cabbage,wolf,None)
 forbiddens=(set((goat,cabbage)), set((wolf,goat))) # Set is a method used to make unordered lists. Here meaning that any combinaiton of goat and cabbage is illegal
 
 # return wether a undesirable situation occurs
-# TODO: Maybe can rewrite this with any() and all() and listcomps
 # If mayhem is met, verdict w
 def mayhem(cfg):
     for shore in cfg[0]:
@@ -39,22 +43,26 @@ def mayhem(cfg):
 # return True when the end condition is reached (when all entities are on the right shore)
 def done(cfg):
     left,right=cfg[0]
-    #return left==set()
+    return left==set()
     
 # Let the farmer ferry across the river, taking an item with him.
 # 'item' can be None is the farmer is to take nothing with him.
 # Return the new configuration, or None is the crossing can't be performed
 # because the item is not on the same shore as the farmer.
 def ferry(cfg,item):
-    left,right=[set(x) for x in cfg[0]] # make copies, because 'left' and 'right' will be mutated
+    left,right=[set(x) for x in cfg[0]]                                 # Make copies, because 'left' and 'right' will be mutated
+    
     # determine on which shore the farmer is, and to which shore he will ferry
     if farmer in left:
         src,dst=left,right
+        
     else:
         src,dst=right,left
+        
     # make sure that if there's an item to carry, it is on the same shore as the farmer
     if item and not item in src:
         return None
+    
     # cross the farmer and possibly the item
     desc="The farmer goes -->" if farmer in left else "The farmer goes <--"
     src.remove(farmer)
@@ -65,9 +73,9 @@ def ferry(cfg,item):
         desc+=" with the "+item
     else:
         desc+=" alone"
-    return ((left,right),desc) # return the resulting configuration
+    return ((left,right),desc)                                          # Return the resulting configuration
 
-# pretty-print a configuration
+# Print a configuration
 def printcfg(cfg,level=0):
     left,right=cfg[0]
     verdict="(Not allowed)" if mayhem(cfg) else "(Ok)"
@@ -89,78 +97,92 @@ def generate(cfg,level=0):
     printcfg(cfg,level)
     childs=onegeneration(cfg)
     for child in childs:
-        if mayhem(child): # skip configurations which are not allowed
+        if mayhem(child):                                               # Skip configurations which are not allowed
             continue
-        if child[0] in previouscfgs: # skip shore configurations which have been seen before
+        if child[0] in previouscfgs:                                    # Skip shore configurations which have been seen before
             continue
         previouscfgs.append(child[0])
         generate(child,level+1)
 
-# starting configuration
-cfg=((set((farmer,goat,cabbage,wolf)), set()),"")
-
-# this records any previously encountered configurations
-previouscfgs=[cfg[0]]
-
-# keep a solution stack for later printing
-solutionstack=[]
-
-# go!
-print "Trace of the recursive solution-finding process:"
-generate(cfg)
-
-print "\nThe solution to the problem:"
-
-#imports the PIL module which helps loading images. Idea is that for each step a new image will be shown for two seconds
-import psutil # Not in use, idea was to kill pop-up window, did not work
-import os
-from PIL import Image  
+cfg=((set((farmer,goat,cabbage,wolf)), set()),"")                       # Starting configuration
 
 
-for step in solutionstack:
-    time.sleep(2)       #Time delay between printing each step.
+previouscfgs=[cfg[0]]                                                   # This records any previously encountered configurations
+
+solutionstack=[]                                                        # Keep a solution stack, we'll use it later for printing
+
+print "The sollution for RiverCrossing:"            
+generate(cfg)                                                           # Shows the sollution in text form before continue with the visulization
+print ""                                                                # Allways nice with spaces, reduce screen cluttering
+print ""
+
+print "Please start the client to visualize the sollution"
+from server import *                                                    # Imports the server settings and awaits an connection before continue on with the visulization
+    
+if connected == True:                                                   # Checks if the connection is made, if true, continue on
+    print "Starting state:"
+    time.sleep(1.5)                                                     # Gives the user 1.5 seconds to read the message before opening the picture
+    img = Image.open("start.png")                                       # Loads the immage into memory
+    img.show()                                                          # Displays the picture
+    img.close()
+    time.sleep(2)                                                       # System sleeps for additional two seconds
+    os.system("taskkill /im dllhost.exe")                               # Terminates the image veiwer to preent cluttering of the screen 
+
+for step in solutionstack:                                              # Goes through the sollution and displays the corresponding image related to the different states
     
     if step == "The farmer goes --> with the goat":
         img = Image.open("state1.png")
         img.show()
         img.close
-    elif step == "The farmer goes <-- alone":     
+        time.sleep(2)
         os.system("taskkill /im dllhost.exe")
+        
+    elif step == "The farmer goes <-- alone":     
         img = Image.open("state2.png")
         img.show()
         img.close()
-    elif step == "The farmer goes --> with the cabbage":
+        time.sleep(2)
         os.system("taskkill /im dllhost.exe")
+        
+    elif step == "The farmer goes --> with the cabbage":
         img = Image.open("state3.png")
         img.show()
         img.close()
-    elif step == "The farmer goes <-- with the goat":
+        time.sleep(2)
         os.system("taskkill /im dllhost.exe")
+        
+    elif step == "The farmer goes <-- with the goat":
         img = Image.open("state4.png")
         img.show()
         img.close() 
-    elif step == "The farmer goes --> with the wolf":
+        time.sleep(2)
         os.system("taskkill /im dllhost.exe")
+        
+    elif step == "The farmer goes --> with the wolf":
         img = Image.open("state5.png")
         img.show()
         img.close()
-    elif step == "The farmer goes <-- alone":
+        time.sleep(2)
         os.system("taskkill /im dllhost.exe")
+        
+    elif step == "The farmer goes <-- alone":
         img = Image.open("state6.png")
         img.show()
         img.close()
-    elif step == "The farmer goes --> with the goat":
+        time.sleep(2)
         os.system("taskkill /im dllhost.exe")
+        
+    elif step == "The farmer goes --> with the goat":
         img = Image.open("state7.png")
         img.show()
         img.close()
+        time.sleep(2)
+        os.system("taskkill /im dllhost.exe")
         
     if step:
         print "  ",step
 
-#print ths endstate, and loads up correct picture
-print cfg
-os.system("taskkill /im dllhost.exe")
+# Displays the end state, and closes the picture after two seconds
 img = Image.open("end.png")
 img.show()
 img.close()
