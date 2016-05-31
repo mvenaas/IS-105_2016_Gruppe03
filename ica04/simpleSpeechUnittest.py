@@ -1,5 +1,5 @@
 import unittest                             # Imports the test library
-from ICA04 import taleInput                 # From is the file the main code is localized in while taleInput is the function we're adressing
+from ica04_simpleSpeech import taleInput                 # From is the file the main code is localized in while taleInput is the function we're adressing
 
 class TestOptionOne(unittest.TestCase):     # Checks if the program gives right result if user choose option five
     def setUp(self):
